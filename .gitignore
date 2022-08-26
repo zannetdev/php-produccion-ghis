@@ -1,0 +1,6 @@
+vendor/
+error_log
+.vscode/
+.user.ini
+php.ini
+core/app.config.php
