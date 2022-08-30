@@ -63,7 +63,7 @@ class Ajustes extends Controller
 	}
 	function cambia_empresa()
 	{
-		$this->model->cambia_empresa($_POST);
+		$this->model->cambia_empresa($_POST, $_FILES['cert_file']['tmp_name'] != '' ? $_FILES['cert_file'] : null);
 	}
 	function get_empresa()
 	{

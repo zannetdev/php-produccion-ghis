@@ -1,44 +1,39 @@
 /// <reference path="../../../core/services/notifications.js" />
 $(function () {
     ClassManager.ActiveMenuItem('ajustes','aj_ajustes')
+    $("#igv").mask('00.00%')
 });
 
-$(".save").on('click', ()=>{
+$("#frm_emp").on('submit', function(e){
+    e.preventDefault()
+    console.log('a')
     if($("#validation").val() == '1'){
-        let data = {
-            ruc: $("#ruc").val(),
-            nombre: $("#empresa").val(),
-            direccion: $("#direccion").val(),
-            ubigeo: $("#ubigeo").val(),
-            distrito: $("#distrito").val(),
-            provincia: $("#provincia").val(),
-            departamento: $("#departamento").val(),
-        }
+        var xhrdata = new FormData(this);
         $.ajax({
             type: "POST",
             url: URL + "ajustes/cambia_empresa",
-            data: data,
-            dataType: "json",	
+            data: xhrdata,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
             success: function (response) {
                 if(response.code == 1){
                     SoundNotifier.Okay();
-
                     Swal.fire({
                         title: 'Notificación',
                         html: response.msj,
                         icon:'success',
                     }).then(function(){
-                        window.location.replace(URL + 'ajustes');
+                       window.location.replace(URL)
                     })
 
                 }else{
                     SoundNotifier.Error();
-
                     Swal.fire({
                         title: 'Notificación',
                         html: response.msj,
                         icon:'error',
-                    }) 
+                    })                  
                 }
             }
         });

@@ -122,6 +122,11 @@ $(".tallas").on('click', () => {
     $("#tabla_tallas").modal('show');
     lista_tallas();
 })
+function toPoint(percent){
+    var str= percent.replace("%","");
+        str= str/100;
+    return str;
+}
 function lista_tallas() {
     
     if (tallas.length > 0) {
@@ -133,14 +138,17 @@ function lista_tallas() {
             tallas.forEach((element, index, array) => {
                 cantidad_total = +cantidad_total + +element.cantidad;
             })
+            console.log(cantidad_total * precio_unitario)
+            let subtotal =  (parseFloat(cantidad_total * precio_unitario) * parseFloat(toPoint($("#igv").val()))).toFixed(2)
             let total = parseFloat(cantidad_total * precio_unitario).toFixed(2);
-            $("#total_compra").val(total)
-            $("#btn1").html(parseFloat(total).toFixed(2));
+            $("#total_compra").val((+subtotal + +total).toFixed(2))
+            $("#igv_total").val(subtotal)
+            $("#subtotal").val(total)
+            $("#btn1").html(parseFloat(+total + +subtotal).toFixed(2));
             let btn = document.getElementById("btn1");
-            btn.dataset.monto = total;
+            btn.dataset.monto = parseFloat(+total + +subtotal).toFixed(2);
         } else {
             $("#total_compra").val('0.00')
-
         }
         $("#tallas").empty();
         for (let i of tallas) {
@@ -181,7 +189,9 @@ $(".make_process").on("click", function (e) {
                         id_modelo: $("#modelo_seleccionado").val(),
                         color: $("#color").val(),
                         id_cliente: $("#id_cliente_1").val(),
-                        type_doc: $("input[name=type_doc]:checked").val()
+                        type_doc: $("input[name=type_doc]:checked").val(),
+                        igv_total : $("#igv_total").val(),
+                        subtotal : $("#subtotal").val(),
                     }
                     let verification_payment = false;
                     if (data.metodo_pago != undefined) {

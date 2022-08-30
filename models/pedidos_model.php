@@ -29,9 +29,12 @@ class Pedidos_Model extends Model
         $color = $request['color'];
         $observaciones = $request['observaciones'];
         $metodo = $request['metodo_pago'];
+        $igv = $_SESSION['empresa']->igv;
         $total_compra = $request['total_compra'];
         $monto = $request['monto_recibido'];
         $cod_transacx = $request['cod_transaccion'];
+        $subtotal = $request['subtotal'];
+        $total_igv = $request['igv_total'];
         $estado = 'c';
         switch ($metodo) {
             case '1':
@@ -65,13 +68,13 @@ class Pedidos_Model extends Model
                 if ($detalle) {
                     if ($metodo == '1') {
                         $pago = $this->db->query("INSERT INTO tm_pago 
-                        (id_pago, id_pedido, id_apc, metodo_pago,monto, total, transaccion_id, foto, fecha, estado, cod_pago, json_response)
-                        VALUES(null, {$id_pedido}, {$id_apc}, '{$metodo}','{$total_compra}','{$total_compra}', '{$cod_transac}', null, '{$fecha}', '{$estado}', '{$cod_pago}', null)");
+                        (id_pago, id_pedido, id_apc, metodo_pago,monto, igv, subtotal, total, transaccion_id, foto, fecha, estado, cod_pago, json_response)
+                        VALUES(null, {$id_pedido}, {$id_apc}, '{$metodo}','{$total_compra}', '{$total_igv}', '{$subtotal}' ,'{$total_compra}', '{$cod_transac}', null, '{$fecha}', '{$estado}', '{$cod_pago}', null)");
                         response_function('Pedido creado, puedes verificar a la cola de pedidos para que puedas mandarlo a producción', 1);
                     } else {
                         $pago = $this->db->query("INSERT INTO tm_pago 
-                        (id_pago, id_pedido, id_apc, metodo_pago,monto, total, transaccion_id, foto, fecha, estado, cod_pago, json_response)
-                        VALUES(null, {$id_pedido}, {$id_apc}, '{$metodo}','{$total_compra}','{$total_compra}', '{$cod_transacx}', null, '{$fecha}', '{$estado}', '{$cod_pago}', null)");
+                        (id_pago, id_pedido, id_apc, metodo_pago,monto,igv, subtotal, total, transaccion_id, foto, fecha, estado, cod_pago, json_response)
+                        VALUES(null, {$id_pedido}, {$id_apc}, '{$metodo}','{$total_compra}','{$total_igv}', '{$subtotal}','{$total_compra}', '{$cod_transacx}', null, '{$fecha}', '{$estado}', '{$cod_pago}', null)");
                         response_function('Pedido creado, puedes verificar a la cola de pedidos para que puedas mandarlo a producción', 1);
                     }
                 }
@@ -83,8 +86,8 @@ class Pedidos_Model extends Model
                         $S = 'pc';
                     }
                     $pago = $this->db->query("INSERT INTO tm_pago 
-                (id_pago, id_pedido, id_apc, metodo_pago,monto, total, transaccion_id, foto, fecha, estado, cod_pago, json_response)
-                VALUES(null, {$id_pedido}, {$id_apc}, '{$metodo}','{$monto}','{$total_compra}', '{$cod_transac}', null, '{$fecha}', '{$estado}', '{$cod_pago}', null)");
+                (id_pago, id_pedido, id_apc, metodo_pago,monto,igv, subtotal, total, transaccion_id, foto, fecha, estado, cod_pago, json_response)
+                VALUES(null, {$id_pedido}, {$id_apc}, '{$metodo}','{$monto}','{$total_igv}', '{$subtotal}','{$total_compra}', '{$cod_transac}', null, '{$fecha}', '{$estado}', '{$cod_pago}', null)");
                     if ($pago) {
                         $id_pago = $this->db->lastInsertId();
                         $this->db->query("UPDATE tm_pedido SET estado = '{$S}' WHERE id_pedido = {$id_pedido}");

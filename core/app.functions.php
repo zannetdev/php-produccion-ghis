@@ -418,7 +418,7 @@ function milmillon($nummierod)
 function convertir($numero)
 {
 	$numf = milmillon($numero);
-	return $numf . " SOLES S/.";
+	return 'SON ' . $numf . " SOLES S/.";
 }
 function fechaEs($fecha)
 {

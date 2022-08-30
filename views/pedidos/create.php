@@ -9,7 +9,7 @@ $data =  ($data);
 
 <input type="hidden" id="nombre_cliente_1" value="">
 <input type="hidden" id="id_cliente_1" value="<?php echo $data->cliente1; ?>">
-
+<input type="hidden" id="igv" value="<?php echo $_SESSION['empresa']->igv ?>">
 <div class="row">
     <div class="col-lg-7 scroll">
         <div class="card">
@@ -116,10 +116,24 @@ $data =  ($data);
                             <small><br>*(Usa esta opción en caso de que el pedido solo sea sin pago.)</small>
                         </div>
                     </div>
+                    <div class="form-group pt-1 total_compra">
+                        <small for="pago_monto">IGV Total</small>
+                        <div class="input-group mb-1">
+                            <span class="input-group-text" id="basic-addon1">S/.</span>
+                            <input type="text" class="form-control" placeholder="Monto IGV" aria-label="Pago" aria-describedby="basic-addon1" id="igv_total" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group pt-1 total_compra">
+                        <small for="pago_monto">Subtotal</small>
+                        <div class="input-group mb-1">
+                            <span class="input-group-text" id="basic-addon1">S/.</span>
+                            <input type="text" class="form-control" placeholder="Subtotal Sin IGV" aria-label="Pago" aria-describedby="basic-addon1" id="subtotal" readonly>
+                        </div>
+                    </div>
 
-                    <div class="form-group pt-2 total_compra">
+                    <div class="form-group pt-1 total_compra">
                         <small for="pago_monto">Total Compra</small>
-                        <div class="input-group mb-3">
+                        <div class="input-group mb-1">
                             <span class="input-group-text" id="basic-addon1">S/.</span>
                             <input type="text" class="form-control" placeholder="Total Compra" aria-label="Pago" aria-describedby="basic-addon1" id="total_compra" readonly>
                         </div>

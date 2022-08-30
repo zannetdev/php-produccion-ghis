@@ -10,22 +10,48 @@ class Ajustes_Model extends Model
     {
         return $this->db->query("SELECT * FROM tm_ajuste")->fetch(PDO::FETCH_OBJ);
     }
-    public function cambia_empresa($request)
+    public function cambia_empresa($request, $file = null)
     {
-        $ruc = $request['ruc'];
-        $nombre = $request['nombre'];
-        $direccion = $request['direccion'];
-        $ubigeo = $request['ubigeo'];
-        $distrito = $request['distrito'];
-        $provincia = $request['provincia'];
-        $departamento = $request['departamento'];
-        $stm = $this->db->query("UPDATE tm_ajuste SET ruc_empresa = '{$ruc}', nombre_empresa = '{$nombre}', direccion = '{$direccion}', ubigeo = '{$ubigeo}',
-        distrito = '{$distrito}', provincia = '{$provincia}', departamento = '{$departamento}'");
-        if ($stm) {
-            response_function('Empresa actualizada', 1);
-        } else {
-            response_function('Empresa no actualizada', -10);
+        $flag_prod = isset($request['flag_produc']) ? 'a' : 'b';
+        $flag_sunat = isset($request['flag_sunat']) ? 'a' : 'b';
+        $empresa = $this->db->query("SELECT * FROM tm_ajuste")->fetch(PDO::FETCH_OBJ);
+        $type = $flag_prod == 'a' ? 'prod' : 'beta';
+        $cx = $empresa->ruta_certificado != '' ? $empresa->ruta_certificado : null; 
+        if(($file != null) || ($cx != null)){
+            $ruta = $file != null ? uploadCert($file, $type) :  $cx ;
+            $ruc = $request['ruc'];
+            $empresa = $request['empresa'];
+            $direccion = $request['direccion'];
+            $ubigeo = $request['ubigeo'];
+            $igv = $request['igv'];
+            $distrito = $request['distrito'];
+            $provincia = $request['provincia'];
+            $departamento = $request['ubigeo'];
+            $usu_sol = $request['usuario_sol'];
+            $clave_sol = $request['clave_sol'];
+            $pwd_cert = $request['pwd_certificado'];
+            if ($ruc != '' && $empresa != '' && $direccion != '' && $ubigeo != '' && $distrito != '' && $provincia != '' && $departamento != '' && $usu_sol != '' 
+            && $clave_sol != '' && $pwd_cert != '') {
+                $stm = $this->db->prepare("UPDATE tm_ajuste SET ruc_empresa = ?,
+                 nombre_empresa = ?, direccion = ?, ubigeo = ?, distrito = ?, provincia = ?, departamento = ?, 
+                 flag_prod = ?, flag_sunat = ?, usu_sol = ?, clave_sol = ?, pwd_certificado = ?, ruta_certificado = ?, igv = ?");
+                if ($stm->execute(
+                    array($ruc, $empresa, $direccion, $ubigeo, $distrito, $provincia, $departamento, $flag_prod, $flag_sunat, $usu_sol, $clave_sol, $pwd_cert, $ruta, $igv)
+                    )) {
+
+					$_SESSION['empresa'] = $empresa;
+                    response_function('Empresa actualizada exitosamente.', 1);
+
+                } else {
+                    response_function('Empresa no actualizada', -10);
+                }
+            }else{
+                response_function('Rellena todos los campos', -10);
+            }
+        }else{
+            response_function('Favor de subir un certificado', -10);
         }
+       
     }
     public function impresoras()
     {
