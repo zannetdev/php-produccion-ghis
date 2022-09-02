@@ -211,7 +211,7 @@ class Fact extends Controller
 
             // Cliente
             $client = new Client();
-            $client->setTipoDoc('6')
+            $client->setTipoDoc('1')
                 ->setNumDoc($detalle->cliente->num_doc)
                 ->setRznSocial($detalle->cliente->nombre . ' ' . $detalle->cliente->apellido_paterno . ' ' . $detalle->cliente->apellido_materno);
 
