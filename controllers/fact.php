@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use Greenter\Model\Client\Client;
@@ -10,6 +11,7 @@ use Greenter\Model\Sale\FormaPagos\FormaPagoCredito;
 use Greenter\Model\Sale\Invoice;
 use Greenter\Model\Sale\SaleDetail;
 use Greenter\Model\Sale\Legend;
+
 $_SESSION['empresa']->flag_sunat == 'b' ? header('Location: ' . URL) : '';
 function dc_($n)
 {
@@ -64,8 +66,8 @@ class Fact extends Controller
             // Cliente
             $client = new Client();
             $client->setTipoDoc('6')
-            ->setNumDoc($detalle->cliente->num_doc)
-            ->setRznSocial($detalle->cliente->nombre . ' ' . $detalle->cliente->apellido_paterno . ' ' . $detalle->cliente->apellido_materno);
+                ->setNumDoc($detalle->cliente->ruc)
+                ->setRznSocial($detalle->cliente->nombre . ' ' . $detalle->cliente->apellido_paterno . ' ' . $detalle->cliente->apellido_materno);
 
             // Emisor
             $address = new Address();

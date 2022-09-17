@@ -217,15 +217,8 @@
                     <div class="form-group mt-2 pt-2 col-12">
                         <select id="chapita" class="form-control selectpicker border" data-live-search="true">
                             <option value="">Seleccione una opción</option>
-                            <?php
-                            foreach ($this->insumos as $k => $d) {
-                                if ($d->nombre_catg == CATG_CHAPITA) {
-                            ?>
-                                    <option value="<?php echo $d->nombre; ?>"><?php echo $d->nombre;?></option>
-                            <?php
-                                }
-                            }
-                            ?>
+                            <option value="SI">SI</option>
+                            <option value="NO">NO</option>
                         </select>
                         <small class="text-muted pt-2">Chapita</small>
                     </div>
@@ -248,11 +241,11 @@
                             <option value="">Seleccione una opción</option>
                             <?php
                             foreach ($this->categoria as $k => $d) {
-                               
+
                             ?>
-                                    <option value="<?php echo $d->id_categoria; ?>"><?php echo $d->nombre; ?></option>
+                                <option value="<?php echo $d->id_categoria; ?>"><?php echo $d->nombre; ?></option>
                             <?php
-                                
+
                             }
                             ?>
                         </select>
@@ -275,7 +268,7 @@
                                     <label class="form-check-label" for="lateral"> Lateral</label>
                                 </div>
                                 <div class="form-check col-6">
-                                    <input class="form-check-input border" type="checkbox" id="lengua"  name="marco">
+                                    <input class="form-check-input border" type="checkbox" id="lengua" name="marco">
                                     <label class="form-check-label" for="lengua"> Lengua</label>
                                 </div>
                                 <div class="form-check col-12 pt-2  justify-center">

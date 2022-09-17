@@ -34,6 +34,11 @@ class Inventario extends Controller
     {
         $this->model->get_inventario($_POST);
     }
+    function delete($id = null)
+    {
+        $id == null ? exit('ERROR') : '';
+        $this->model->delete($id);
+    }
     function get_inventario_catg()
     {
         $this->model->get_inventario_catg($_POST);
@@ -69,7 +74,8 @@ class Inventario extends Controller
         }
     }
     function crud_modelo($process, $id_modelo = '')
-    {   $this->view->process = $process;
+    {
+        $this->view->process = $process;
         $this->view->categoria = $this->model->get_catg_modelos();
         $this->view->insumos = $this->model->inventario();
         if ($process == 'agrega') {
@@ -83,14 +89,14 @@ class Inventario extends Controller
                         $this->view->id_modelo = $id_modelo;
                         $this->view->js = array('inventario/crud/js/modelo_crud.js');
                         $this->view->render('inventario/crud/modelo', false);
-                    }else{
-                        header('Location : ' . URL );
+                    } else {
+                        header('Location : ' . URL);
                     }
-                }else{
-                    header('Location : ' . URL );
+                } else {
+                    header('Location : ' . URL);
                 }
-            }else{
-                header('Location : ' . URL );
+            } else {
+                header('Location : ' . URL);
             }
         }
     }
@@ -108,8 +114,9 @@ class Inventario extends Controller
             }
         }
     }
-    public function get_data_model(){
-        if($_POST){
+    public function get_data_model()
+    {
+        if ($_POST) {
             $id = $_POST['id'];
             $c = $this->model->get_specific_model($id);
             $route  =  str_replace(URL, '', $c->imagen);

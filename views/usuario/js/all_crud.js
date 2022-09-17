@@ -1,6 +1,3 @@
-/// <reference path="../../../typings/globals/jquery/index.d.ts" />
-/// <reference path="../../../logic/js/functions_helpers.js" />
-/// <reference path="../../../logic/js/components.js" />
 
 
 $(document).ready(function () {
@@ -23,12 +20,13 @@ $(document).ready(function () {
             direccion: $("#direccion").val(),
             usuario: $("#usuario").val(),
             password: $("#password").val(),
-            tipo_doc : $("#tp_doc").val(),
+            tipo_doc : 2,
             num_doc : $("#num_doc").val(),
+            num_doc_ruc: $("#num_doc_ruc").val()
         }
         if(data.apellido_mateno != '' && data.apellido_paterno != "" &&  data.direccion != "" && data.email != "" && data.genero  != ""
         && data.nombre != "" && data.id_rol != "" && data.num_doc != "" && data.password != "" && data.telefono 
-        != "" && data.tipo_doc != "" && data.usuario){
+        != "" && data.tipo_doc != "" && data.usuario && data.num_doc_ruc != ''){
             $.ajax({
                 type: "POST",
                 url: $("#url").val() + 'usuario/crud_usuario',
@@ -102,8 +100,9 @@ $(document).ready(function () {
                         $("#usuario").val(usuario.username);
                         $("#direccion").val(usuario.direccion);
                         $("#password").val('');
-                        select_option("#tp_doc", usuario.id_doc);
                         $("#num_doc").val(usuario.num_doc);
+                        $("#num_doc_ruc").val(usuario.ruc);
+
                    }
                 }
             });

@@ -249,7 +249,7 @@ class Inventario_Model extends Model
 		$fecha = date('Y-m-d H:i:s');
 		$existencia = $this->db->query("SELECT id_modelo FROM tm_modelo WHERE cod_diseño = '{$cod_diseno}' AND cod_diseño <> '{$cod_anterior->cod_diseño}'")->fetchAll(PDO::FETCH_OBJ);
 		if (!$existencia) {
-				$c = $this->db->query("UPDATE tm_modelo SET id_categoria = '{$id_categoria}', cod_diseño = '{$cod_diseno}',
+			$c = $this->db->query("UPDATE tm_modelo SET id_categoria = '{$id_categoria}', cod_diseño = '{$cod_diseno}',
 			precio = '{$precio}', cuero_1 = '{$cuero_1}', cuero_2 = '{$cuero_2}', capellado = '{$capellado}', tela = '{$tela}',
 			forro_1 = '{$forro_1}', forro_2 = '{$forro_2}', grabado = '{$grabado}', marcar_empalme = '{$marcar_empalme}', desuaste_1 = '{$desuaste_1}',
 			desuaste_2 = '{$desuaste_2}', pintado_bordes = '{$pin_bordes}', aguja_1 = '{$aguja_1}', aguja_2 = '{$aguja_2}', hilo_1 = '{$hilo_1}',
@@ -258,13 +258,23 @@ class Inventario_Model extends Model
 			horma = '{$horma}', planta = '{$planta}', falso = '{$falso}', plantillos = '{$plantillo}', latex = '{$latex}', preimer = '{$preimer}',
 			sombreado = '{$sombreado}', taco = '{$taco}', serie = '{$serie}', imagen = '{$img->route}', fecha = '{$fecha}', estado = '{$estado}' 
 			WHERE id_modelo = {$id}");
-				if ($c) {
-					response_function('Modelo actualizado correctamente', 1);
-				} else {
-					response_function('Modelo no actualizado correctamente', -10);
-				}
-		}else {
+			if ($c) {
+				response_function('Modelo actualizado correctamente', 1);
+			} else {
+				response_function('Modelo no actualizado correctamente', -10);
+			}
+		} else {
 			response_function('Codigo de diseño ya registrado, usa otro.', -10);
+		}
+	}
+	public function delete($id = null)
+	{
+		$id == null ? exit('ERROR') : '';
+		$c = $this->db->prepare("DELETE FROM tm_insumo WHERE id_insumo = ?");
+		if ($c->execute([$id])) {
+			response_function('Eliminado correctamente', 1);
+		} else {
+			response_function('Error', -10);
 		}
 	}
 }

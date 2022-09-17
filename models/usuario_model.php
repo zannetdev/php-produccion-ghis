@@ -6,12 +6,14 @@ class Usuario_Model extends Model
 	{
 		parent::__construct();
 	}
-	public function get_usu_area($request){
+	public function get_usu_area($request)
+	{
 		$id_usuario = $request['id_usu'];
-		$c = $this->db->query("SELECT * FROM v_area WHERE id_usuario = {$id_usuario} ")->fetch(PDO::FETCH_OBJ);	
+		$c = $this->db->query("SELECT * FROM v_area WHERE id_usuario = {$id_usuario} ")->fetch(PDO::FETCH_OBJ);
 		return_data_json($c);
 	}
-	public function get_areas(){
+	public function get_areas()
+	{
 		return $this->db->query("SELECT * FROM tm_area")->fetchAll(PDO::FETCH_OBJ);
 	}
 	public function get_clientes()
@@ -19,7 +21,8 @@ class Usuario_Model extends Model
 		$c = $this->db->query("SELECT  * FROM  v_clientes")->fetchAll(PDO::FETCH_OBJ);
 		return_data_json($c);
 	}
-	public function get_empleados(){
+	public function get_empleados()
+	{
 		$usuid = Session::get('usuid');
 		$c = $this->db->query("SELECT  * FROM  v_usuarios WHERE id_usuario <> {$usuid}")->fetchAll(PDO::FETCH_OBJ);
 		return_data_json($c);
@@ -34,6 +37,7 @@ class Usuario_Model extends Model
 			$nombre = $request['nombre'];
 			$apellido_paterno = $request['apellido_paterno'];
 			$apellido_materno = $request['apellido_materno'];
+			$num_doc_ruc = $request['num_doc_ruc'];
 			$id_rol = $request['id_rol'];
 			$genero = $request['genero'];
 			$email = $request['email'];
@@ -42,14 +46,14 @@ class Usuario_Model extends Model
 			$direccion = $request['direccion'];
 			$fecha_registro = date('Y-m-d H:i:s');
 
-			$x = $this->db->query("SELECT username FROM tm_cliente WHERE username = '{$username}'")->fetchAll(PDO::FETCH_OBJ);
+			$x = $this->db->prepare("SELECT username FROM tm_cliente WHERE username = '{$username}'")->fetchAll(PDO::FETCH_OBJ);
 			$x_usuario = $this->db->query("SELECT username FROM tm_usuario WHERE username = '{$username}'")->fetchAll(PDO::FETCH_OBJ);
 			if ((!$x) && (!$x_usuario)) {
 				$c = $this->db->query("INSERT INTO tm_usuario
-				(id_usuario, id_doc, id_rol, id_area, username, password, num_doc, 
+				(id_usuario, id_doc, id_rol, id_area, username, password, num_doc,  ruc,
 				nombre, apellido_paterno, apellido_materno, genero, email, telefono, estado,
-				 direccion, fecha_registro, fecha_actividad)
-				 VALUES(null, {$id_doc}, {$id_rol}, null, '{$username}', '{$password}',  '{$num_doc}',  '{$nombre}', 
+				direccion, fecha_registro, fecha_actividad)
+				VALUES(null, {$id_doc}, {$id_rol}, null, '{$username}', '{$password}',  '{$num_doc}', '{$num_doc_ruc}' , '{$nombre}', 
 				'{$apellido_paterno}',  '{$apellido_materno}',  '{$genero}',  '{$email}',  '{$telefono}',  '{$estado}',  '{$direccion}',  '{$fecha_registro}', null)");
 				if ($c) {
 					response_function('Usuario registrado', 1);
@@ -72,6 +76,7 @@ class Usuario_Model extends Model
 		$id_rol = $request['id_rol'];
 		$num_doc = $request['num_doc'];
 		$nombre = $request['nombre'];
+		$num_doc_ruc = $request['num_doc_ruc'];
 		$apellido_paterno = $request['apellido_paterno'];
 		$apellido_materno = $request['apellido_materno'];
 		$genero = $request['genero'];
@@ -83,7 +88,7 @@ class Usuario_Model extends Model
 		$x = $this->db->query("SELECT username FROM tm_cliente WHERE username = '{$username}' AND username <> '{$last_user->username}' ")->fetchAll(PDO::FETCH_OBJ);
 		$x_usuario = $this->db->query("SELECT username FROM tm_usuario WHERE username = '{$username}' AND username <> '{$last_user->username}'")->fetchAll(PDO::FETCH_OBJ);
 		if ((!$x) && (!$x_usuario)) {
-			$c = $this->db->query("UPDATE tm_usuario SET id_doc = {$id_doc}, id_rol = {$id_rol}, username = '{$username}', password = '{$password}', num_doc = '{$num_doc}', 
+			$c = $this->db->query("UPDATE tm_usuario SET id_doc = {$id_doc}, ruc = '{$num_doc_ruc}', id_rol = {$id_rol}, username = '{$username}', password = '{$password}', num_doc = '{$num_doc}', 
 				nombre = '{$nombre}', apellido_paterno = '{$apellido_paterno}', apellido_materno = '{$apellido_materno}', genero = '{$genero}', email = '{$email}', telefono = '{$telefono}', estado = '{$estado}',  direccion = '{$direccion}' WHERE id_usuario = {$id_usuario}");
 			if ($c) {
 				response_function('Usuario Actualizado', 1);
@@ -102,6 +107,7 @@ class Usuario_Model extends Model
 			$id_doc = $request['tipo_doc'];
 			$num_doc = $request['num_doc'];
 			$nombre = $request['nombre'];
+			$num_doc_ruc = $request['num_doc_ruc'];
 			$apellido_paterno = $request['apellido_paterno'];
 			$apellido_materno = $request['apellido_materno'];
 
@@ -116,10 +122,10 @@ class Usuario_Model extends Model
 			$x_usuario = $this->db->query("SELECT username FROM tm_usuario WHERE username = '{$username}'")->fetchAll(PDO::FETCH_OBJ);
 			if ((!$x) && (!$x_usuario)) {
 				$c = $this->db->query("INSERT INTO tm_cliente
-				(id_cliente, id_doc, id_rol, username, password, num_doc, 
+				(id_cliente, id_doc, id_rol, username, password, num_doc, ruc,
 				nombre, apellido_paterno, apellido_materno, genero, email, telefono, estado,
 				 direccion, fecha_registro, fecha_actividad)
-				 VALUES(null, {$id_doc}, 4, '{$username}', '{$password}',  '{$num_doc}',  '{$nombre}', 
+				 VALUES(null, {$id_doc}, 4, '{$username}', '{$password}',  '{$num_doc}', '{$num_doc_ruc}' , '{$nombre}', 
 				'{$apellido_paterno}',  '{$apellido_materno}',  '{$genero}',  '{$email}',  '{$telefono}',  '{$estado}',  '{$direccion}',  '{$fecha_registro}', null)");
 				if ($c) {
 					response_function('Cliente registrado', 1);
@@ -139,6 +145,7 @@ class Usuario_Model extends Model
 		$password = password_hash($request['password'], PASSWORD_BCRYPT);
 		$id_doc = $request['tipo_doc'];
 		$id_usuario = $request['id_usuario'];
+		$num_doc_ruc = $request['num_doc_ruc'];
 
 		$num_doc = $request['num_doc'];
 		$nombre = $request['nombre'];
@@ -153,7 +160,7 @@ class Usuario_Model extends Model
 		$x = $this->db->query("SELECT username FROM tm_cliente WHERE username = '{$username}' AND username <> '{$last_user->username}' ")->fetchAll(PDO::FETCH_OBJ);
 		$x_usuario = $this->db->query("SELECT username FROM tm_usuario WHERE username = '{$username}' AND username <> '{$last_user->username}'")->fetchAll(PDO::FETCH_OBJ);
 		if ((!$x) && (!$x_usuario)) {
-			$c = $this->db->query("UPDATE tm_cliente SET id_doc = {$id_doc}, username = '{$username}', password = '{$password}', num_doc = '{$num_doc}', 
+			$c = $this->db->query("UPDATE tm_cliente SET id_doc = {$id_doc}, ruc = '{$num_doc_ruc}', username = '{$username}', password = '{$password}', num_doc = '{$num_doc}', 
 				nombre = '{$nombre}', apellido_paterno = '{$apellido_paterno}', apellido_materno = '{$apellido_materno}', genero = '{$genero}', email = '{$email}', telefono = '{$telefono}', estado = '{$estado}',  direccion = '{$direccion}' WHERE id_cliente = {$id_usuario}");
 			if ($c) {
 				response_function('Cliente Actualizado', 1);
@@ -189,22 +196,23 @@ class Usuario_Model extends Model
 				CASE estado 
 				WHEN 'a' THEN 'b'
 				WHEN 'b' THEN 'a' END
-				WHERE id_cliente  = {$id_usu}");	
-		}else{
+				WHERE id_cliente  = {$id_usu}");
+		} else {
 			$c = $this->db->query("UPDATE " . $tblname . " SET estado = 
 			CASE estado 
 			WHEN 'a' THEN 'b'
 			WHEN 'b' THEN 'a' END
-			WHERE id_usuario  = {$id_usu}");	
+			WHERE id_usuario  = {$id_usu}");
 		}
 	}
-	public function set_area($request){
+	public function set_area($request)
+	{
 		$id_usu = $request['usuid'];
 		$id_area = $request['id_area'];
 		$c = $this->db->query("UPDATE tm_usuario SET id_area = {$id_area} WHERE id_usuario = {$id_usu}");
-		if($c){
+		if ($c) {
 			response_function('Area actualizada', 1);
-		}else{
+		} else {
 			response_function('Area no actualizada, verifica tu conexión o contacta al programador', 1);
 		}
 	}

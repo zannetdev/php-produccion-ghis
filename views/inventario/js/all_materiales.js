@@ -87,6 +87,7 @@ function lista_material(id_c){
                     <span class="visually-hidden">Toggle Dropdown</span>
                   </button>
                   <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="javascript:delete_(${data.id_insumo});"><i class="mdi mdi-trash-can"></i>  Eliminar</a></li>
                     <li><a class="dropdown-item" href="javascript:edita_material(${data.id_insumo}, '${data.nombre}','${data.id_categoria}','${data.estado}');"><i class="mdi mdi-pencil"></i>  Editar</a></li>
                   </ul>
                 </div>`
@@ -98,6 +99,37 @@ function lista_material(id_c){
         
      });
 }
+
+const delete_ = (id)=> { 
+    Delete : {
+        $.ajax({
+            type: "POST",
+            url: $("#url").val() + 'inventario/delete/' + id,
+            dataType: "json",
+            success: function (response) {
+                if(response.code == 1){
+                    Swal.fire({
+                        title:'Correcto',
+                        html: response.msj,
+                        icon: 'success',
+                        backdrop: '#2bff5d',
+                    }).then(()=>{
+                        lista_material('%');
+                    })
+                }else{
+                    Swal.fire({
+                        title: 'Error',
+                        html: response.msj,
+                        icon:'error'
+                    }).then(()=>{
+                        lista_material('%');
+                    })
+                }
+            }
+        });
+    }
+}
+
 $("#btn_ctn").on("click", function(e){
     show_form();
     reset_values();

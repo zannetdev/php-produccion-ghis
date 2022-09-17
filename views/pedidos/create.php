@@ -82,24 +82,17 @@ $data =  ($data);
                     </div>
 
                     <div class="dropdown-divider mt-2 mb-2"></div>
-                    <label class="text-muted text-center">Tipo de Documento</label>
+                    <label class="text-muted text-center">Enviar a la Sunat?</label>
                     <div class="alert alert-dark" role="alert">
-                        <strong>Selecciona el documento que deseas emitir.</strong>
+                        <strong>¿Deseas enviar este pedido a la sunat?</strong>
                     </div>
                     <div class="col-12">
-                        <?php
-                        foreach ($this->docs as $k => $d) {
-                        ?>
-                            <div class="form-check form-check-inline">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" type="radio" name="type_doc" id="" value="<?php echo $d->id_documento ?>"> <?php echo $d->nombre ?>
-                                </label>
+                       
+                        <select id="send_sun" class="form-control selectpicker border" data-live-search="true">
+                            <option value="1">Si</option>
+                            <option value="0">No</option>
 
-                            </div>
-
-                        <?php
-                        }
-                        ?>
+                        </select>
                     </div>
                     <div class="dropdown-divider"></div>
                     <div class="">
